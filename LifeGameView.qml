@@ -5,10 +5,28 @@ Item {
     id: element
     width: 329
     height: 410
+    property int playGroundSize: 100
 
     Grid {
         id: playGround
-        anchors.fill: parent
+        x: 8
+        y: 8
+        width: 328
+        height: 328
+        spacing: 1
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        rows: playGroundSize
+        columns: playGroundSize
+        Repeater {
+            model: playGroundSize*playGroundSize
+            Rectangle {
+                width: 1.0*playGround.width/playGroundSize - 1 + 1.0*playGround.spacing/playGroundSize
+                height: 1.0*playGround.height/playGroundSize - 1 + 1.0*playGround.spacing/playGroundSize
+                radius: 0
+                border.width: 1
+            }
+        }
     }
     states: [
         State {
@@ -20,6 +38,32 @@ Item {
     ]
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

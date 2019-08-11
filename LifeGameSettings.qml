@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 
 Item {
     id: element
+    property alias sliderValue: slider.value
 
     Text {
         id: element1
@@ -26,7 +27,7 @@ Item {
         y: 88
         width: 19
         height: 15
-        text: "10"
+        text: slider.from
         font.pixelSize: 12
     }
 
@@ -37,16 +38,16 @@ Item {
         width: 162
         height: 40
         from: 10
-        to: 1000
+        to: 100
         stepSize: 1
-        value: 100
+        value: 15
     }
 
     Text {
         id: element4
         x: 193
         y: 88
-        text: "1000"
+        text: slider.to
         font.pixelSize: 12
     }
 
@@ -128,6 +129,14 @@ Item {
     ]
 
 }
+
+
+
+
+
+
+
+
 
 
 

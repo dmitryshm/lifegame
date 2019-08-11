@@ -14,6 +14,7 @@ Window {
 
     LifeGameView {
         id: gameView
+        playGroundSize: lifeGameSettings.sliderValue
         anchors.right: rulesView.left
         anchors.rightMargin: 13
         anchors.bottom: parent.bottom
