@@ -40,7 +40,7 @@ Item {
         from: 3
         to: 1000
         stepSize: 1
-        value: 50
+        value: 10
     }
 
     Text {
@@ -131,6 +131,8 @@ Item {
     ]
 
 }
+
+
 
 
 
