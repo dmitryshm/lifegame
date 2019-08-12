@@ -67,6 +67,10 @@ Item {
 
 
 
+
+
+
+
 /*##^## Designer {
     D{i:0;autoSize:true;height:480;width:640}D{i:1;anchors_height:328;anchors_width:328;anchors_x:8;anchors_y:8}
 }

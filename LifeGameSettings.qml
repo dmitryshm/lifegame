@@ -85,6 +85,7 @@ Item {
 
             PropertyChanges {
                 target: slider
+                enabled: false
                 visible: false
             }
 
@@ -103,6 +104,7 @@ Item {
 
             PropertyChanges {
                 target: slider
+                enabled: false
                 visible: false
             }
 
@@ -129,6 +131,8 @@ Item {
     ]
 
 }
+
+
 
 
 
