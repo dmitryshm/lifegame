@@ -37,10 +37,10 @@ Item {
         y: 75
         width: 162
         height: 40
-        from: 10
-        to: 100
+        from: 3
+        to: 1000
         stepSize: 1
-        value: 15
+        value: 50
     }
 
     Text {
@@ -129,6 +129,10 @@ Item {
     ]
 
 }
+
+
+
+
 
 
 

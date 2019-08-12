@@ -8,9 +8,7 @@ Window {
     visible: true
     title: "игра \"Жизнь\""
     minimumWidth: 640
-    maximumWidth: 640
     minimumHeight: 440
-    maximumHeight: 440
 
     LifeGameView {
         id: gameView
@@ -66,12 +64,11 @@ Window {
         Button {
             id: exitButton
             x: 148
-            y: 370
             width: 131
             height: 40
             text: "Выход"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 370
             anchors.right: parent.right
             anchors.rightMargin: 0
         }
@@ -79,12 +76,11 @@ Window {
         Button {
             id: runButton
             x: 0
-            y: 410
             width: 129
             height: 40
             text: "Запуск"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 370
             anchors.left: parent.left
             anchors.leftMargin: 0
         }
@@ -145,3 +141,8 @@ Window {
 
 
 
+
+/*##^## Designer {
+    D{i:5;anchors_y:370}D{i:6;anchors_y:410}
+}
+ ##^##*/

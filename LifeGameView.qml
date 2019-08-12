@@ -3,31 +3,23 @@ import QtQuick.Controls 2.3
 
 Item {
     id: element
-    width: 329
-    height: 410
-    property int playGroundSize: 100
+    property int playGroundSize: 10
 
-    Grid {
+    ShaderEffect {
         id: playGround
-        x: 8
-        y: 8
-        width: 328
-        height: 328
-        spacing: 1
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        rows: playGroundSize
-        columns: playGroundSize
-        Repeater {
-            model: playGroundSize*playGroundSize
-            Rectangle {
-                width: 1.0*playGround.width/playGroundSize - 1 + 1.0*playGround.spacing/playGroundSize
-                height: 1.0*playGround.height/playGroundSize - 1 + 1.0*playGround.spacing/playGroundSize
-                radius: 0
-                border.width: 1
-            }
-        }
+        property vector3d params: Qt.vector3d(playGroundSize + 0.1, 0.1, 0.5)
+        anchors.fill: parent
+        fragmentShader: "
+            varying vec2 qt_TexCoord0;
+            uniform vec3 params;
+            void main()
+            {
+              vec2 grid = fract(qt_TexCoord0.xy*params.x);
+              gl_FragColor.rgb = vec3(smoothstep(params.y,params.z,grid.x)*smoothstep(params.y,params.z,grid.y));
+              gl_FragColor.a = 1.0;
+            }"
     }
+
     states: [
         State {
             name: "gameRun"
@@ -75,11 +67,7 @@ Item {
 
 
 
-
-
-
-
 /*##^## Designer {
-    D{i:1;anchors_height:464;anchors_width:624;anchors_x:8;anchors_y:8}
+    D{i:0;autoSize:true;height:480;width:640}D{i:1;anchors_height:328;anchors_width:328;anchors_x:8;anchors_y:8}
 }
  ##^##*/
