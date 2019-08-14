@@ -2,6 +2,16 @@
 #include <QtDebug>
 #include <QRgb>
 
+CustomImageEditor::CustomImageEditor() : QQuickImageProvider(QQuickImageProvider::Pixmap)
+{
+}
+
+QPixmap CustomImageEditor::requestPixmap(const QString& id, QSize* size, const QSize& requestSize)
+{
+
+}
+
+/*
 CustomImageEditor::CustomImageEditor(QObject *parent) : QObject(parent)
 {
 
@@ -24,3 +34,4 @@ Q_INVOKABLE void CustomImageEditor::initImage(int playgroundSize)
     image.fill(qRgb(0, 0, 0));
     m_image.swap(image);
 }
+*/
