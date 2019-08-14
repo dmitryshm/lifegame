@@ -10,30 +10,40 @@ Item {
         id: customImageEditor
     }
     onPlayGroundSizeChanged: customImageEditor.initImage(playGroundSize)
+    Component.onCompleted: customImageEditor.initImage(playGroundSize)
 
     ShaderEffect {
         id: playGround
-        property vector3d params: Qt.vector3d(playGroundSize + 0.1, 0.1, 0.5)
+        property vector2d fieldSize: Qt.vector2d(mouseArea.width, mouseArea.height)
+        property vector3d gridParams: Qt.vector3d(playGroundSize + 0.1, 0.1, 0.5)
         property variant imagePattern: customImageEditor.image
         anchors.fill: parent
         fragmentShader: "
             varying vec2 qt_TexCoord0;
-            uniform vec3 params;
+            uniform vec2 fieldSize;
+            uniform vec3 gridParams;
+            uniform sampler2D imagePattern;
             void main()
             {
-              vec2 grid = fract(qt_TexCoord0.xy*params.x);
-              gl_FragColor.rgb = vec3(smoothstep(params.y,params.z,grid.x)*smoothstep(params.y,params.z,grid.y));
-              gl_FragColor.a = 1.0;
+                vec2 patternCoord = vec2(gridParams.x*qt_TexCoord0.x/fieldSize.x, gridParams.x*qt_TexCoord0.y/fieldSize.y);
+                vec4 patternColor = texture2D(imagePattern, patternCoord);
+                vec2 grid = fract(qt_TexCoord0.xy*gridParams.x);
+                vec3 gridColor = vec3(smoothstep(gridParams.y,gridParams.z,grid.x)*smoothstep(gridParams.y,gridParams.z,grid.y));
+                gl_FragColor.rgb = vec3(gridColor.r*(1.0 - patternColor.r), gridColor.g*(1.0 - patternColor.g), gridColor.b*(1.0 - patternColor.b));
+                gl_FragColor.a = 1.0;
             }"
     }
 
     Image {
         id: cellsPattern
+        x: 34
+        y: 28
         width: playGroundSize
         height: playGroundSize
         enabled: false
         smooth: false
-        visible: false
+        //visible: false
+        z: 1
     }
 
     MouseArea {
@@ -56,6 +66,14 @@ Item {
     ]
 
 }
+
+
+
+
+
+
+
+
 
 
 
