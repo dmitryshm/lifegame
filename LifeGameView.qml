@@ -8,6 +8,9 @@ Item {
 
     CustomImageEditor {
         id: customImageEditor
+        onImageChanged: {
+            playGround.update();
+        }
     }
     onPlayGroundSizeChanged: customImageEditor.initImage(playGroundSize)
     Component.onCompleted: customImageEditor.initImage(playGroundSize)
@@ -16,7 +19,10 @@ Item {
         id: playGround
         property vector2d fieldSize: Qt.vector2d(mouseArea.width, mouseArea.height)
         property vector3d gridParams: Qt.vector3d(playGroundSize + 0.1, 0.1, 0.5)
-        property variant imagePattern: customImageEditor.image
+        property variant imagePattern: ShaderEffectSource {
+            sourceItem: customImageEditor.image
+            hideSource: true
+        }
         anchors.fill: parent
         fragmentShader: "
             varying vec2 qt_TexCoord0;
@@ -32,18 +38,6 @@ Item {
                 gl_FragColor.rgb = vec3(gridColor.r*(1.0 - patternColor.r), gridColor.g*(1.0 - patternColor.g), gridColor.b*(1.0 - patternColor.b));
                 gl_FragColor.a = 1.0;
             }"
-    }
-
-    Image {
-        id: cellsPattern
-        x: 34
-        y: 28
-        width: playGroundSize
-        height: playGroundSize
-        enabled: false
-        smooth: false
-        //visible: false
-        z: 1
     }
 
     MouseArea {
@@ -66,6 +60,8 @@ Item {
     ]
 
 }
+
+
 
 
 
