@@ -1,15 +1,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include "customimageprovider.h"
 #include "customimageeditor.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
-    //qmlRegisterType<CustomImageEditor>("com.dmitryshm.CustomImageEditor", 1, 0, "CustomImageEditor");
+    qmlRegisterType<CustomImageEditor>("com.dmitryshm.CustomImageEditor", 1, 0, "CustomImageEditor");
+    engine.addImageProvider(QLatin1String("customprovider"), new CustomImageProvider);
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -17,6 +17,5 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
-
     return app.exec();
 }

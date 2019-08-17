@@ -1,18 +1,18 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
-//import com.dmitryshm.CustomImageEditor 1.0
+import com.dmitryshm.CustomImageEditor 1.0
 
 Item {
     id: element
     property int playGroundSize: 10
 
-    /*
     CustomImageEditor {
         id: customImageEditor
         onImageChanged: {
             playGround.update();
         }
     }
+    /*
     onPlayGroundSizeChanged: customImageEditor.initImage(playGroundSize)
     Component.onCompleted: customImageEditor.initImage(playGroundSize)
     */
@@ -21,12 +21,6 @@ Item {
         id: playGround
         //property vector2d fieldSize: Qt.vector2d(mouseArea.width, mouseArea.height)
         property vector3d gridParams: Qt.vector3d(playGroundSize + 0.1, 0.1, 0.5)
-        /*
-        property variant imagePattern: ShaderEffectSource {
-            sourceItem: customImageEditor.image
-            hideSource: true
-        }
-        */
         anchors.fill: parent
         fragmentShader: "
             varying vec2 qt_TexCoord0;
@@ -52,7 +46,7 @@ Item {
 
     Connections {
         target: mouseArea
-        //onClicked: customImageEditor.setupImagePixel(playGroundSize*mouseArea.mouseX/mouseArea.width, playGroundSize*mouseArea.mouseY/mouseArea.height)
+        onClicked: customImageEditor.setupImagePixel(playGroundSize*mouseArea.mouseX/mouseArea.width, playGroundSize*mouseArea.mouseY/mouseArea.height)
     }
 
     states: [

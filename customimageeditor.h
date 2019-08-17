@@ -2,16 +2,12 @@
 #define CUSTOMIMAGEEDITOR_H
 
 #include <QObject>
-#include <QQuickImageProvider>
 #include <QImage>
+#include "customimageprovider.h"
 
-class CustomImageEditor : public QQuickImageProvider
+class CustomImageEditor : public QObject
 {
 public:
-    CustomImageEditor();
-    QPixmap requestPixmap(const QString& id, QSize* size, const QSize& requestSize) override;
-
-    /*
     Q_OBJECT
     Q_PROPERTY(QImage image MEMBER m_image NOTIFY imageChanged)
 
@@ -24,7 +20,6 @@ signals:
     void imageChanged();
 
 public slots:
-*/
 
 private:
     QImage m_image;
