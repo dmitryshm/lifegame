@@ -21,7 +21,7 @@ Item {
 
     ShaderEffect {
         id: playGround
-        //property vector2d fieldSize: Qt.vector2d(mouseArea.width, mouseArea.height)
+        property vector2d fieldSize: Qt.vector2d(mouseArea.width, mouseArea.height)
         property vector3d gridParams: Qt.vector3d(playGroundSize + 0.1, 0.1, 0.5)
         property Image imagePattern: Image {
             source: "image://customprovider/image"
@@ -30,17 +30,16 @@ Item {
         anchors.fill: parent
         fragmentShader: "
             varying vec2 qt_TexCoord0;
-            //uniform vec2 fieldSize;
+            uniform vec2 fieldSize;
             uniform vec3 gridParams;
             uniform sampler2D imagePattern;
             void main()
             {
-                //vec2 patternCoord = vec2(gridParams.x*qt_TexCoord0.x/fieldSize.x, gridParams.x*qt_TexCoord0.y/fieldSize.y);
-                //vec4 patternColor = texture2D(imagePattern, patternCoord);
+                vec2 patternCoord = vec2(gridParams.x*qt_TexCoord0.x/fieldSize.x, gridParams.x*qt_TexCoord0.y/fieldSize.y);
+                vec4 patternColor = texture2D(imagePattern, patternCoord);
                 vec2 grid = fract(qt_TexCoord0.xy*gridParams.x);
                 vec3 gridColor = vec3(smoothstep(gridParams.y,gridParams.z,grid.x)*smoothstep(gridParams.y,gridParams.z,grid.y));
-                //gl_FragColor.rgb = vec3(gridColor.r*(1.0 - patternColor.r), gridColor.g*(1.0 - patternColor.g), gridColor.b*(1.0 - patternColor.b));
-                gl_FragColor.rgb = gridColor;
+                gl_FragColor.rgb = vec3(gridColor.r*(1.0 - patternColor.r), gridColor.g*(1.0 - patternColor.g), gridColor.b*(1.0 - patternColor.b));
                 gl_FragColor.a = 1.0;
             }"
     }

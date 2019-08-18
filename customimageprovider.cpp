@@ -8,19 +8,23 @@ QImage CustomImageProvider::requestImage(const QString &id, QSize *size, const Q
 {
     Q_UNUSED(id)
     Q_UNUSED(requestSize)
-    *size = QSize(10, 10);
-    QImage img(*size, QImage::Format_RGB32);
-    img.fill(qRgb(0, 0, 0));
-    return img;
+    *size = m_image.size();
+    return m_image;
 }
 
 void CustomImageProvider::setupPixel(int x, int y)
 {
     Q_UNUSED(x);
     Q_UNUSED(y);
+    m_image.setPixelColor(x, y, qRgb(255,255,255));
 }
 
 void CustomImageProvider::setSize(int size)
 {
-    Q_UNUSED(size);
+    if (size <= 0)
+    {
+        return;
+    }
+    m_image = QImage(size, size, QImage::Format_RGB32);
+    m_image.fill(qRgb(0, 0, 0));
 }
