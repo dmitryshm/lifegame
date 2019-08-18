@@ -16,14 +16,20 @@ Item {
         patternSize: playGroundSize
     }
 
+    Image {
+        id: pattern
+        width: 100
+        height: 100
+        cache: false
+        source: "image://customprovider/image"
+        z: 1
+    }
+
     ShaderEffect {
         id: playGround
         property vector2d fieldSize: Qt.vector2d(mouseArea.width, mouseArea.height)
         property vector3d gridParams: Qt.vector3d(playGroundSize + 0.1, 0.1, 0.5)
-        property Image imagePattern: Image {
-            source: "image://customprovider/image"
-            cache: false
-        }
+        property Image imagePattern: pattern
         anchors.fill: parent
         fragmentShader: "
             varying vec2 qt_TexCoord0;
