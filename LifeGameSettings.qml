@@ -59,6 +59,55 @@ Item {
         wrapMode: Text.WordWrap
         font.pixelSize: 12
     }
+
+    Text {
+        id: element6
+        x: 65
+        y: 22
+        width: 24
+        height: 10
+        visible: false
+        font.pixelSize: 12
+        text: "скорость хода"
+    }
+
+    Slider {
+        id: speedSlider
+        x: 26
+        y: 38
+        width: 162
+        stepSize: 1
+        to: 2
+        visible: false
+        value: 1
+    }
+
+    Text {
+        id: element7
+        x: 27
+        y: 84
+        text: "1 с"
+        visible: false
+        font.pixelSize: 12
+    }
+
+    Text {
+        id: element8
+        x: 93
+        y: 84
+        text: "0.1 c"
+        visible: false
+        font.pixelSize: 12
+    }
+
+    Text {
+        id: element9
+        x: 143
+        y: 84
+        text: "максимальная"
+        visible: false
+        font.pixelSize: 12
+    }
     states: [
         State {
             name: "gameRun"
@@ -92,6 +141,31 @@ Item {
             PropertyChanges {
                 target: element4
                 visible: false
+            }
+
+            PropertyChanges {
+                target: element6
+                visible: true
+            }
+
+            PropertyChanges {
+                target: speedSlider
+                visible: true
+            }
+
+            PropertyChanges {
+                target: element7
+                visible: true
+            }
+
+            PropertyChanges {
+                target: element8
+                visible: true
+            }
+
+            PropertyChanges {
+                target: element9
+                visible: true
             }
         },
         State {
@@ -131,6 +205,14 @@ Item {
     ]
 
 }
+
+
+
+
+
+
+
+
 
 
 

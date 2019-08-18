@@ -1,5 +1,4 @@
 #include "customimageeditor.h"
-#include <QtDebug>
 #include <QRgb>
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -16,7 +15,6 @@ Q_INVOKABLE void CustomImageEditor::setupImagePixel(int x, int y)
     {
         return;
     }
-    qDebug() << "x = " << x << ", y = " << y;
     prov->setupPixel(x, y);
     emit imageChanged();
 }

@@ -90,6 +90,15 @@ Window {
         target: exitButton
         onClicked: Qt.quit()
     }
+
+    Connections {
+        target: runButton
+        onClicked: {
+            runButton.enabled = false
+            lifeGameSettings.state = "gameRun"
+            gameView.state = "gameRun"
+        }
+    }
 }
 
 

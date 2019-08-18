@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.3
 import com.dmitryshm.CustomImageEditor 1.0
 
 Item {
@@ -11,7 +10,6 @@ Item {
         onImageChanged: {
             playGround.imagePattern.source = ""
             playGround.imagePattern.source = "image://customprovider/updatedImage"
-            playGround.update();
         }
         patternSize: playGroundSize
     }

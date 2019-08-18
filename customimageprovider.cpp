@@ -17,7 +17,7 @@ QImage CustomImageProvider::requestImage(const QString &id, QSize *size, const Q
 
 void CustomImageProvider::setupPixel(int x, int y)
 {
-    m_image.setPixelColor(x, y, qRgb(255,255,255));
+    m_image.setPixelColor(x, y, qRgb(255,255,255) - m_image.pixel(x, y));
 }
 
 void CustomImageProvider::setSize(int size)
