@@ -23,13 +23,18 @@ Q_INVOKABLE void CustomImageEditor::setupImagePixel(int x, int y)
 
 void CustomImageEditor::setPatternSize(int val)
 {
-    m_patternSize = val;
     CustomImageProvider* prov = customImageProvider();
     if (prov == nullptr)
     {
         return;
     }
     prov->setSize(val);
+    const bool shouldFire = (m_patternSize != val);
+    m_patternSize = val;
+    if (shouldFire)
+    {
+        emit imageChanged();
+    }
 }
 
 int CustomImageEditor::getPatternSize() const

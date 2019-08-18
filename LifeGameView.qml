@@ -9,15 +9,12 @@ Item {
     CustomImageEditor {
         id: customImageEditor
         onImageChanged: {
+            playGround.imagePattern.source = ""
+            playGround.imagePattern.source = "image://customprovider/updatedImage"
             playGround.update();
         }
         patternSize: playGroundSize
     }
-
-    /*
-    onPlayGroundSizeChanged: customImageEditor.initImage(playGroundSize)
-    Component.onCompleted: customImageEditor.initImage(playGroundSize)
-    */
 
     ShaderEffect {
         id: playGround
