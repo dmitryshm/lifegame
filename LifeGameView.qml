@@ -11,7 +11,9 @@ Item {
         onImageChanged: {
             playGround.update();
         }
+        patternSize: playGroundSize
     }
+
     /*
     onPlayGroundSizeChanged: customImageEditor.initImage(playGroundSize)
     Component.onCompleted: customImageEditor.initImage(playGroundSize)
@@ -21,12 +23,16 @@ Item {
         id: playGround
         //property vector2d fieldSize: Qt.vector2d(mouseArea.width, mouseArea.height)
         property vector3d gridParams: Qt.vector3d(playGroundSize + 0.1, 0.1, 0.5)
+        property Image imagePattern: Image {
+            source: "image://customprovider/image"
+            cache: false
+        }
         anchors.fill: parent
         fragmentShader: "
             varying vec2 qt_TexCoord0;
             //uniform vec2 fieldSize;
             uniform vec3 gridParams;
-            //uniform sampler2D imagePattern;
+            uniform sampler2D imagePattern;
             void main()
             {
                 //vec2 patternCoord = vec2(gridParams.x*qt_TexCoord0.x/fieldSize.x, gridParams.x*qt_TexCoord0.y/fieldSize.y);

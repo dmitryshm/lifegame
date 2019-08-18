@@ -2,13 +2,14 @@
 #define CUSTOMIMAGEPROVIDER_H
 
 #include <QQuickImageProvider>
-#include <QPixmap>
 
 class CustomImageProvider : public QQuickImageProvider
 {
 public:
     explicit CustomImageProvider();
-    QPixmap requestPixmap(const QString& id, QSize* size, const QSize& requestSize) override;
+    QImage requestImage(const QString& id, QSize* size, const QSize& requestSize) override;
+    void setupPixel(int x, int y);
+    void setSize(int size);
 };
 
 #endif // CUSTOMIMAGEPROVIDER_H

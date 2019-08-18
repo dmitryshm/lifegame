@@ -9,20 +9,23 @@ class CustomImageEditor : public QObject
 {
 public:
     Q_OBJECT
-    Q_PROPERTY(QImage image MEMBER m_image NOTIFY imageChanged)
+    Q_PROPERTY(int patternSize READ getPatternSize WRITE setPatternSize)
 
 public:
     explicit CustomImageEditor(QObject *parent = nullptr);
     Q_INVOKABLE void setupImagePixel(int x, int y);
-    Q_INVOKABLE void initImage(int playgroundSize);
+    void setPatternSize(int val);
+    int getPatternSize() const;
 
 signals:
+    void patternSizeChanged();
     void imageChanged();
 
 public slots:
 
 private:
-    QImage m_image;
+    int m_patternSize;
+    CustomImageProvider* customImageProvider() const;
 };
 
 #endif // CUSTOMIMAGEEDITOR_H
