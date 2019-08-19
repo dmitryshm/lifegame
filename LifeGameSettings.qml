@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 Item {
     id: element
     property alias sliderValue: slider.value
+    property int moveNo: 0
 
     Text {
         id: element1
@@ -63,7 +64,7 @@ Item {
     Text {
         id: element6
         x: 65
-        y: 22
+        y: 5
         width: 24
         height: 10
         visible: false
@@ -74,7 +75,7 @@ Item {
     Slider {
         id: speedSlider
         x: 26
-        y: 38
+        y: 21
         width: 162
         stepSize: 1
         to: 2
@@ -85,7 +86,7 @@ Item {
     Text {
         id: element7
         x: 27
-        y: 84
+        y: 67
         text: "1 с"
         visible: false
         font.pixelSize: 12
@@ -94,7 +95,7 @@ Item {
     Text {
         id: element8
         x: 93
-        y: 84
+        y: 67
         text: "0.1 c"
         visible: false
         font.pixelSize: 12
@@ -103,8 +104,26 @@ Item {
     Text {
         id: element9
         x: 143
-        y: 84
+        y: 67
         text: "максимальная"
+        visible: false
+        font.pixelSize: 12
+    }
+
+    Text {
+        id: element10
+        x: 57
+        y: 88
+        text: "номер хода:"
+        visible: false
+        font.pixelSize: 12
+    }
+
+    Text {
+        id: element11
+        x: 136
+        y: 88
+        text: moveNo
         visible: false
         font.pixelSize: 12
     }
@@ -167,6 +186,16 @@ Item {
                 target: element9
                 visible: true
             }
+
+            PropertyChanges {
+                target: element11
+                visible: true
+            }
+
+            PropertyChanges {
+                target: element10
+                visible: true
+            }
         },
         State {
             name: "gameResults"
@@ -205,6 +234,14 @@ Item {
     ]
 
 }
+
+
+
+
+
+
+
+
 
 
 
