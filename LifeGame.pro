@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         customimageeditor.cpp \
         customimageprovider.cpp \
-        main.cpp
+        main.cpp \
+        movemaker.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,4 +33,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     customimageeditor.h \
-    customimageprovider.h
+    customimageprovider.h \
+    movemaker.h

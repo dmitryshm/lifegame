@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import com.dmitryshm.CustomImageEditor 1.0
+import com.dmitryshm 1.0
 
 Item {
     id: element
@@ -12,6 +12,12 @@ Item {
             playGround.imagePattern.source = "image://customprovider/updatedImage"
         }
         patternSize: playGroundSize
+    }
+
+    MoveMaker {
+        id: moveMaker
+        anchors.fill: parent
+        z: 1
     }
 
     ShaderEffect {
