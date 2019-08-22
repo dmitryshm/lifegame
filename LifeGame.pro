@@ -16,7 +16,8 @@ SOURCES += \
         customimageeditor.cpp \
         customimageprovider.cpp \
         main.cpp \
-        movemaker.cpp
+        movemaker.cpp \
+        utils.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     customimageeditor.h \
     customimageprovider.h \
-    movemaker.h
+    movemaker.h \
+    utils.h

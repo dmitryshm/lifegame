@@ -2,6 +2,7 @@
 #define MOVEMAKER_H
 
 #include <QQuickFramebufferObject>
+#include "customimageeditor.h"
 
 class MoveMaker : public QQuickFramebufferObject
 {
@@ -12,6 +13,7 @@ public:
 signals:
 
 public slots:
+
 };
 
 #endif // MOVEMAKER_H

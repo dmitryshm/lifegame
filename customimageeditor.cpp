@@ -3,6 +3,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include "customimageprovider.h"
+#include "utils.h"
 
 CustomImageEditor::CustomImageEditor(QObject *parent) : QObject(parent)
 {
@@ -10,7 +11,7 @@ CustomImageEditor::CustomImageEditor(QObject *parent) : QObject(parent)
 
 Q_INVOKABLE void CustomImageEditor::setupImagePixel(int x, int y)
 {
-    CustomImageProvider* prov = customImageProvider();
+    CustomImageProvider* prov = CustomImageProviderFromQmlObject(this);
     if (prov == nullptr)
     {
         return;
@@ -21,7 +22,7 @@ Q_INVOKABLE void CustomImageEditor::setupImagePixel(int x, int y)
 
 void CustomImageEditor::setPatternSize(int val)
 {
-    CustomImageProvider* prov = customImageProvider();
+    CustomImageProvider* prov = CustomImageProviderFromQmlObject(this);
     if (prov == nullptr)
     {
         return;
@@ -38,19 +39,4 @@ void CustomImageEditor::setPatternSize(int val)
 int CustomImageEditor::getPatternSize() const
 {
     return m_patternSize;
-}
-
-CustomImageProvider* CustomImageEditor::customImageProvider() const
-{
-    QQmlContext* context = QQmlEngine::contextForObject(this);
-    if (context == nullptr)
-    {
-        return nullptr;
-    }
-    QQmlEngine* engine = context->engine();
-    if (engine == nullptr)
-    {
-        return nullptr;
-    }
-    return dynamic_cast<CustomImageProvider*>(engine->imageProvider(QLatin1String("customprovider")));
 }

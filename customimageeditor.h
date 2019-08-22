@@ -25,7 +25,6 @@ public slots:
 
 private:
     int m_patternSize;
-    CustomImageProvider* customImageProvider() const;
 };
 
 #endif // CUSTOMIMAGEEDITOR_H
