@@ -50,20 +50,21 @@ protected:
             1.0f, 1.0f,
             0.0f, 1.0f
         };
+        glViewport(0, 0, m_itemWidth, m_itemHeight);
+        glClear(GL_COLOR_BUFFER_BIT);
         if (!m_shaderProgram.bind())
         {
             qDebug() << "!m_shaderProgram.bind()";
             return;
         }
+        m_texture.bind();
         m_shaderProgram.setUniformValueArray(m_vertexLoc, vertexData, 4, 2);
         m_shaderProgram.setUniformValueArray(m_texCoordLoc, uvData, 4, 2);
         m_shaderProgram.setUniformValue(m_imageLoc, 0);
-        glViewport(0, 0, m_itemWidth, m_itemHeight);
-        glClear(GL_COLOR_BUFFER_BIT);
-        m_texture.bind();
         glDrawArrays(GL_TRIANGLES, 0, 4);
         m_texture.release();
         m_shaderProgram.release();
+        update();
     }
 
     void synchronize(QQuickFramebufferObject *item)
@@ -86,7 +87,7 @@ protected:
              "varying vec2 fragTexCoord;\n"
              "void main() {\n"
              "fragTexCoord = vertTexCoord;\n"
-             "gl_Position = vec4(vertex, 1.0, 1.0);\n"
+             "gl_Position = vec4(vertex, 0.0, 1.0);\n"
              "}\n");
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
             "uniform sampler2D imagePattern;\n"
