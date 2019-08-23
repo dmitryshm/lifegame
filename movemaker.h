@@ -7,13 +7,15 @@
 class MoveMaker : public QQuickFramebufferObject
 {
     Q_OBJECT
+
 public:
     MoveMaker(QQuickItem *parent = nullptr);
     QQuickFramebufferObject::Renderer* createRenderer() const;
+
 signals:
 
 public slots:
-
+    void Move();
 };
 
 #endif // MOVEMAKER_H
