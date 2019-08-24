@@ -17,7 +17,8 @@ protected:
         m_itemHeight(0),
         m_imageLoc(-1),
         m_vertexLoc(-1),
-        m_texCoordLoc(-1)
+        m_texCoordLoc(-1),
+        m_isFirstInit(true)
     {
     }
 
@@ -51,6 +52,7 @@ protected:
             0.0f, 1.0f
         };
         glViewport(0, 0, m_itemWidth, m_itemHeight);
+        glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         if (!m_shaderProgram.bind())
         {
@@ -64,11 +66,10 @@ protected:
         m_shaderProgram.setAttributeArray(m_texCoordLoc, uvData, 4, 2);
         m_shaderProgram.setUniformValue(m_imageLoc, 0);
         glDrawArrays(GL_TRIANGLES, 0, 4);
-        m_shaderProgram.disableAttributeArray(m_vertexLoc);
-        m_shaderProgram.disableAttributeArray(m_texCoordLoc);
-        m_texture.release();
-        m_shaderProgram.release();
-        update();
+        //m_shaderProgram.disableAttributeArray(m_vertexLoc);
+        //m_shaderProgram.disableAttributeArray(m_texCoordLoc);
+        //m_texture.release();
+        //m_shaderProgram.release();
     }
 
     void synchronize(QQuickFramebufferObject *item)
@@ -85,30 +86,36 @@ protected:
         }
         m_itemWidth = static_cast<GLsizei>(myitem->width());
         m_itemHeight = static_cast<GLsizei>(myitem->height());
-        m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
-             "attribute vec2 vertex;\n"
-             "attribute vec2 vertTexCoord;\n"
-             "varying vec2 fragTexCoord;\n"
-             "void main() {\n"
-             "fragTexCoord = vertTexCoord;\n"
-             "gl_Position = vec4(vertex, 0.0, 1.0);\n"
-             "}\n");
-        m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
-            "uniform sampler2D imagePattern;\n"
-            "varying vec2 fragTexCoord;\n"
-            "void main() {\n"
-            "   gl_FragColor = texture2D(imagePattern, fragTexCoord);\n"
-            "}\n");
-        if (!m_shaderProgram.link())
+        if (m_isFirstInit)
         {
-            return;
+            m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
+                 "attribute vec2 vertex;\n"
+                 "attribute vec2 vertTexCoord;\n"
+                 "varying vec2 fragTexCoord;\n"
+                 "void main() {\n"
+                 "fragTexCoord = vertTexCoord;\n"
+                 "gl_Position = vec4(vertex, 0.0, 1.0);\n"
+                 "}\n");
+            m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
+                "uniform sampler2D imagePattern;\n"
+                "varying vec2 fragTexCoord;\n"
+                "void main() {\n"
+                "   gl_FragColor = texture2D(imagePattern, fragTexCoord);\n"
+                "}\n");
+            if (!m_shaderProgram.link())
+            {
+                return;
+            }
+            m_vertexLoc = m_shaderProgram.uniformLocation("vertex");
+            m_texCoordLoc = m_shaderProgram.uniformLocation("vertTexCoord");
+            m_imageLoc = m_shaderProgram.uniformLocation("imagePattern");
+            m_texture.setMinificationFilter(QOpenGLTexture::Nearest);
+            m_texture.setMagnificationFilter(QOpenGLTexture::Nearest);
+            m_texture.setWrapMode(QOpenGLTexture::ClampToEdge);
+            m_isFirstInit = false;
         }
-        m_vertexLoc = m_shaderProgram.uniformLocation("vertex");
-        m_texCoordLoc = m_shaderProgram.uniformLocation("vertTexCoord");
-        m_imageLoc = m_shaderProgram.uniformLocation("imagePattern");
-        m_texture.setMinificationFilter(QOpenGLTexture::Nearest);
-        m_texture.setMagnificationFilter(QOpenGLTexture::Nearest);
-        m_texture.setWrapMode(QOpenGLTexture::ClampToEdge);
+        m_texture.destroy();
+        m_texture.create();
         QSize sizeRet, sizeReq;
         m_texture.setData(imageProv->requestImage("image", &sizeRet, sizeReq), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
     }
@@ -126,6 +133,7 @@ private:
     int m_imageLoc;
     int m_vertexLoc;
     int m_texCoordLoc;
+    bool m_isFirstInit;
 };
 
 MoveMaker::MoveMaker(QQuickItem *parent) : QQuickFramebufferObject(parent)
@@ -139,5 +147,5 @@ QQuickFramebufferObject::Renderer* MoveMaker::createRenderer() const
 
 void MoveMaker::Move()
 {
-    //this->window()
+    update();
 }

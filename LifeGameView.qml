@@ -24,6 +24,13 @@ Item {
         z: 1
     }
 
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: moveMaker.update()
+    }
+
     ShaderEffect {
         id: playGround
         property vector2d fieldSize: Qt.vector2d(mouseArea.width, mouseArea.height)
