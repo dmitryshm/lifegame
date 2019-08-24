@@ -58,10 +58,14 @@ protected:
             return;
         }
         m_texture.bind();
-        m_shaderProgram.setUniformValueArray(m_vertexLoc, vertexData, 4, 2);
-        m_shaderProgram.setUniformValueArray(m_texCoordLoc, uvData, 4, 2);
+        m_shaderProgram.enableAttributeArray(m_vertexLoc);
+        m_shaderProgram.enableAttributeArray(m_texCoordLoc);
+        m_shaderProgram.setAttributeArray(m_vertexLoc, vertexData, 4, 2);
+        m_shaderProgram.setAttributeArray(m_texCoordLoc, uvData, 4, 2);
         m_shaderProgram.setUniformValue(m_imageLoc, 0);
         glDrawArrays(GL_TRIANGLES, 0, 4);
+        m_shaderProgram.disableAttributeArray(m_vertexLoc);
+        m_shaderProgram.disableAttributeArray(m_texCoordLoc);
         m_texture.release();
         m_shaderProgram.release();
         update();
@@ -82,8 +86,8 @@ protected:
         m_itemWidth = static_cast<GLsizei>(myitem->width());
         m_itemHeight = static_cast<GLsizei>(myitem->height());
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
-             "uniform vec2 vertex;\n"
-             "uniform vec2 vertTexCoord;\n"
+             "attribute vec2 vertex;\n"
+             "attribute vec2 vertTexCoord;\n"
              "varying vec2 fragTexCoord;\n"
              "void main() {\n"
              "fragTexCoord = vertTexCoord;\n"
