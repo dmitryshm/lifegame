@@ -33,10 +33,10 @@ protected:
              "gl_Position = vec4(vertex, 0.0, 1.0);\n"
              "}\n");
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
-            "//uniform sampler2D imagePattern;\n"
+            "uniform sampler2D imagePattern;\n"
             "varying vec2 fragTexCoord;\n"
             "void main() {\n"
-            "   gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);//texture2D(imagePattern, fragTexCoord);\n"
+            "   gl_FragColor = texture2D(imagePattern, fragTexCoord);\n"
             "}\n");
         if (!m_shaderProgram.link())
         {
@@ -44,7 +44,7 @@ protected:
         }
         m_vertexLoc = m_shaderProgram.attributeLocation("vertex");
         m_texCoordLoc = m_shaderProgram.attributeLocation("vertTexCoord");
-        //m_imageLoc = m_shaderProgram.uniformLocation("imagePattern");
+        m_imageLoc = m_shaderProgram.uniformLocation("imagePattern");
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -63,15 +63,15 @@ protected:
 
     void render()
     {
-        if ((-1 == m_vertexLoc) || (-1 == m_texCoordLoc) /*|| (-1 == m_imageLoc)*/)
+        if ((-1 == m_vertexLoc) || (-1 == m_texCoordLoc) || (-1 == m_imageLoc))
         {
             return;
         }
         const GLfloat vertexData[] = {
-            0.0f, 0.0f,
-            static_cast<float>(m_itemWidth), 0.0f,
-            static_cast<float>(m_itemWidth), static_cast<float>(m_itemHeight),
-            0.0f, static_cast<float>(m_itemHeight)
+            -1.0f, -1.0f,
+            1.0f, -1.0f,
+            1.0f, 1.0f,
+            -1.0f, 1.0f
         };
         const GLushort indices[] = { 0, 1, 2, 0, 2, 3 };
         const GLfloat uvData[] = {
@@ -94,7 +94,7 @@ protected:
         m_shaderProgram.enableAttributeArray(m_texCoordLoc);
         m_shaderProgram.setAttributeArray(m_vertexLoc, vertexData, 2, 0);
         m_shaderProgram.setAttributeArray(m_texCoordLoc, uvData, 2, 0);
-        //m_shaderProgram.setUniformValue(m_imageLoc, 0);
+        m_shaderProgram.setUniformValue(m_imageLoc, 0);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
         m_shaderProgram.disableAttributeArray(m_vertexLoc);
         m_shaderProgram.disableAttributeArray(m_texCoordLoc);
