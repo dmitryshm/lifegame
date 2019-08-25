@@ -23,7 +23,6 @@ protected:
         m_isFirstInit(true)
     {
         initializeOpenGLFunctions();
-        glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
              "attribute vec2 vertex;\n"
              "attribute vec2 vertTexCoord;\n"
@@ -45,8 +44,6 @@ protected:
         m_vertexLoc = m_shaderProgram.attributeLocation("vertex");
         m_texCoordLoc = m_shaderProgram.attributeLocation("vertTexCoord");
         m_imageLoc = m_shaderProgram.uniformLocation("imagePattern");
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     }
 
@@ -80,10 +77,6 @@ protected:
             1.0f, 1.0f,
             0.0f, 1.0f
         };
-        glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
         if (!m_shaderProgram.bind())
         {
             qDebug() << "!m_shaderProgram.bind()";

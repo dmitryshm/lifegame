@@ -25,7 +25,7 @@ Item {
     }
 
     Timer {
-        interval: 100
+        interval: 2000
         running: true
         repeat: true
         onTriggered: moveMaker.update()
