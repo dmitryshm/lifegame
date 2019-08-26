@@ -49,7 +49,7 @@ protected:
             "   vec4 cpm = texture2D(imagePattern, vec2(xp, ym));\n"
             "   vec4 cmo = texture2D(imagePattern, vec2(xm, fragTexCoord.y));\n"
             "   vec4 cpo = texture2D(imagePattern, vec2(xp, fragTexCoord.y));\n"
-            "   vec4 cmp = texture2D(imagePattern, vec2(xp, fragTexCoord.y));\n"
+            "   vec4 cmp = texture2D(imagePattern, vec2(xm, yp));\n"
             "   vec4 cop = texture2D(imagePattern, vec2(fragTexCoord.x, yp));\n"
             "   vec4 cpp = texture2D(imagePattern, vec2(xp, yp));\n"
             "   float s = cmm.x + com.x + cpm.x + cmo.x + cpo.x + cmp.x + cop.x + cpp.x;\n"
