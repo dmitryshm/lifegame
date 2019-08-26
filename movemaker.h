@@ -11,11 +11,6 @@ class MoveMaker : public QQuickFramebufferObject
 public:
     MoveMaker(QQuickItem *parent = nullptr);
     QQuickFramebufferObject::Renderer* createRenderer() const;
-
-signals:
-
-public slots:
-    void Move();
 };
 
 #endif // MOVEMAKER_H

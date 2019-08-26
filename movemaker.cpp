@@ -20,22 +20,44 @@ protected:
         m_imageLoc(-1),
         m_vertexLoc(-1),
         m_texCoordLoc(-1),
+        m_texSizeLoc(-1),
         m_isFirstInit(true)
     {
         initializeOpenGLFunctions();
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
              "attribute vec2 vertex;\n"
              "attribute vec2 vertTexCoord;\n"
+             "attribute vec2 texSizeIn;\n"
              "varying vec2 fragTexCoord;\n"
+             "varying vec2 texSize;\n"
              "void main() {\n"
              "fragTexCoord = vertTexCoord;\n"
+             "texSize = texSizeIn;\n"
              "gl_Position = vec4(vertex, 0.0, 1.0);\n"
              "}\n");
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
             "uniform sampler2D imagePattern;\n"
             "varying vec2 fragTexCoord;\n"
+            "varying vec2 texSize;\n"
             "void main() {\n"
-            "   gl_FragColor = texture2D(imagePattern, fragTexCoord);\n"
+            "   float tx = 1.0/texSize.x;\n"
+            "   float ty = 1.0/texSize.y;\n"
+            "   float xm = fragTexCoord.x + 1.0 - tx - step(fragTexCoord.x*texSize.x, 1.0);\n"
+            "   float ym = fragTexCoord.y + 1.0 - ty - step(fragTexCoord.y*texSize.y, 1.0);\n"
+            "   float xp = fragTexCoord.x + tx + step(fragTexCoord.x*texSize.x, texSize.x - 1.0) - 1.0;\n"
+            "   float yp = fragTexCoord.y + ty + step(fragTexCoord.y*texSize.y, texSize.y - 1.0) - 1.0;\n"
+            "   vec4 coo = texture2D(imagePattern, fragTexCoord);\n"
+            "   vec4 cmm = texture2D(imagePattern, vec2(xm, ym));\n"
+            "   vec4 com = texture2D(imagePattern, vec2(fragTexCoord.x, ym));\n"
+            "   vec4 cpm = texture2D(imagePattern, vec2(xp, ym));\n"
+            "   vec4 cmo = texture2D(imagePattern, vec2(xm, fragTexCoord.y));\n"
+            "   vec4 cpo = texture2D(imagePattern, vec2(xp, fragTexCoord.y));\n"
+            "   vec4 cmp = texture2D(imagePattern, vec2(xp, fragTexCoord.y));\n"
+            "   vec4 cop = texture2D(imagePattern, vec2(fragTexCoord.x, yp));\n"
+            "   vec4 cpp = texture2D(imagePattern, vec2(xp, yp));\n"
+            "   float s = cmm.r + com.r + cpm.r + cmo.r + cpo.r + cmp.r + cop.r + cpp.r;\n"
+            "   float c = step(s, 2.0) + step(3.0, s) - 1.0;\n"
+            "   gl_FragColor = vec4(c, c, c, 1.0);\n"
             "}\n");
         if (!m_shaderProgram.link())
         {
@@ -43,8 +65,8 @@ protected:
         }
         m_vertexLoc = m_shaderProgram.attributeLocation("vertex");
         m_texCoordLoc = m_shaderProgram.attributeLocation("vertTexCoord");
+        m_texSizeLoc = m_shaderProgram.attributeLocation("texSizeIn");
         m_imageLoc = m_shaderProgram.uniformLocation("imagePattern");
-
     }
 
     virtual ~MoveMakerRenderer()
@@ -60,7 +82,7 @@ protected:
 
     void render()
     {
-        if ((-1 == m_vertexLoc) || (-1 == m_texCoordLoc) || (-1 == m_imageLoc))
+        if ((-1 == m_vertexLoc) || (-1 == m_texCoordLoc) || (-1 == m_texSizeLoc) || (-1 == m_imageLoc))
         {
             return;
         }
@@ -79,7 +101,6 @@ protected:
         };
         if (!m_shaderProgram.bind())
         {
-            qDebug() << "!m_shaderProgram.bind()";
             return;
         }
         m_texture.bind();
@@ -87,6 +108,7 @@ protected:
         m_shaderProgram.enableAttributeArray(m_texCoordLoc);
         m_shaderProgram.setAttributeArray(m_vertexLoc, vertexData, 2, 0);
         m_shaderProgram.setAttributeArray(m_texCoordLoc, uvData, 2, 0);
+        m_shaderProgram.setAttributeValue(m_texSizeLoc, m_itemWidth, m_itemHeight);
         m_shaderProgram.setUniformValue(m_imageLoc, 0);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
         m_shaderProgram.disableAttributeArray(m_vertexLoc);
@@ -107,8 +129,8 @@ protected:
         {
             return;
         }
-        m_itemWidth = static_cast<GLsizei>(myitem->width());
-        m_itemHeight = static_cast<GLsizei>(myitem->height());
+        m_itemWidth = static_cast<GLfloat>(myitem->width());
+        m_itemHeight = static_cast<GLfloat>(myitem->height());
         m_texture.destroy();
         m_texture.create();
         m_texture.setMinificationFilter(QOpenGLTexture::Nearest);
@@ -118,19 +140,15 @@ protected:
         m_texture.setData(imageProv->requestImage("image", &sizeRet, sizeReq), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
     }
 
-    void move()
-    {
-
-    }
-
 private:
     QOpenGLTexture m_texture;
     QOpenGLShaderProgram m_shaderProgram;
-    GLsizei m_itemWidth;
-    GLsizei m_itemHeight;
+    GLfloat m_itemWidth;
+    GLfloat m_itemHeight;
     int m_imageLoc;
     int m_vertexLoc;
     int m_texCoordLoc;
+    int m_texSizeLoc;
     bool m_isFirstInit;
 };
 
@@ -141,9 +159,4 @@ MoveMaker::MoveMaker(QQuickItem *parent) : QQuickFramebufferObject(parent)
 QQuickFramebufferObject::Renderer* MoveMaker::createRenderer() const
 {
     return new MoveMakerRenderer;
-}
-
-void MoveMaker::Move()
-{
-    update();
 }
