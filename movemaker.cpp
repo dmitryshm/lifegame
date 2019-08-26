@@ -74,6 +74,8 @@ protected:
     {
         QOpenGLFramebufferObjectFormat format;
         format.setAttachment(QOpenGLFramebufferObject::NoAttachment);
+        format.setSamples(0);
+        format.setMipmap(false);
         return new QOpenGLFramebufferObject(size, format);
     }
 
@@ -136,7 +138,7 @@ protected:
         if (myitem->hasMove())
         {
             m_isMoving = true;
-            m_texture.setData(framebufferObject()->toImage(), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
+            m_texture.setData(framebufferObject()->toImage(false), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
             myitem->moveCompleted();
         }
         else if (!m_isMoving)

@@ -27,13 +27,14 @@ Item {
 
     Timer {
         id: moveTimer
-        interval: 10000
+        interval: 1000
         running: false
         repeat: true
         onTriggered: moveMaker.move()
     }
 
     Timer {
+        id: setupTimer
         interval: 100
         running: true
         repeat: true
@@ -84,6 +85,10 @@ Item {
             PropertyChanges {
                 target: playGround
                 imagePattern: moveMaker
+            }
+            PropertyChanges {
+                target: setupTimer
+                running: false
             }
             PropertyChanges {
                 target: moveTimer
