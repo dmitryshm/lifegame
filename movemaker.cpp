@@ -77,6 +77,7 @@ protected:
     {
         QOpenGLFramebufferObjectFormat format;
         format.setAttachment(QOpenGLFramebufferObject::NoAttachment);
+        format.setSamples(9);
         return new QOpenGLFramebufferObject(size, format);
     }
 
