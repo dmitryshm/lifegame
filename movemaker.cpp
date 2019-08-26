@@ -20,32 +20,29 @@ protected:
         m_imageLoc(-1),
         m_vertexLoc(-1),
         m_texCoordLoc(-1),
-        m_texSizeLoc(-1),
+        //m_texSizeLoc(-1),
         m_isFirstInit(true)
     {
         initializeOpenGLFunctions();
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
              "attribute vec2 vertex;\n"
              "attribute vec2 vertTexCoord;\n"
-             "attribute vec2 texSizeIn;\n"
              "varying vec2 fragTexCoord;\n"
-             "varying vec2 texSize;\n"
              "void main() {\n"
-             "fragTexCoord = vertTexCoord;\n"
-             "texSize = texSizeIn;\n"
-             "gl_Position = vec4(vertex, 0.0, 1.0);\n"
+             "    fragTexCoord = vertTexCoord;\n"
+             "    gl_Position = vec4(vertex, 0.0, 1.0);\n"
              "}\n");
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
             "uniform sampler2D imagePattern;\n"
             "varying vec2 fragTexCoord;\n"
-            "varying vec2 texSize;\n"
+            "uniform vec2 texSize;\n"
             "void main() {\n"
             "   float tx = 1.0/texSize.x;\n"
             "   float ty = 1.0/texSize.y;\n"
-            "   float xm = fragTexCoord.x + 1.0 - tx - step(fragTexCoord.x*texSize.x, 1.0);\n"
-            "   float ym = fragTexCoord.y + 1.0 - ty - step(fragTexCoord.y*texSize.y, 1.0);\n"
-            "   float xp = fragTexCoord.x + tx + step(fragTexCoord.x*texSize.x, texSize.x - 1.0) - 1.0;\n"
-            "   float yp = fragTexCoord.y + ty + step(fragTexCoord.y*texSize.y, texSize.y - 1.0) - 1.0;\n"
+            "   float xm = fragTexCoord.x + 1.0 - tx - step(fragTexCoord.x, tx);\n"
+            "   float ym = fragTexCoord.y + 1.0 - ty - step(fragTexCoord.y, ty);\n"
+            "   float xp = fragTexCoord.x + tx + step(fragTexCoord.x, 1.0 - tx) - 1.0;\n"
+            "   float yp = fragTexCoord.y + ty + step(fragTexCoord.y, 1.0 - ty) - 1.0;\n"
             "   vec4 coo = texture2D(imagePattern, fragTexCoord);\n"
             "   vec4 cmm = texture2D(imagePattern, vec2(xm, ym));\n"
             "   vec4 com = texture2D(imagePattern, vec2(fragTexCoord.x, ym));\n"
@@ -65,7 +62,7 @@ protected:
         }
         m_vertexLoc = m_shaderProgram.attributeLocation("vertex");
         m_texCoordLoc = m_shaderProgram.attributeLocation("vertTexCoord");
-        m_texSizeLoc = m_shaderProgram.attributeLocation("texSizeIn");
+        m_texSizeLoc = m_shaderProgram.uniformLocation("texSize");
         m_imageLoc = m_shaderProgram.uniformLocation("imagePattern");
     }
 
@@ -77,7 +74,6 @@ protected:
     {
         QOpenGLFramebufferObjectFormat format;
         format.setAttachment(QOpenGLFramebufferObject::NoAttachment);
-        format.setSamples(9);
         return new QOpenGLFramebufferObject(size, format);
     }
 
@@ -109,7 +105,7 @@ protected:
         m_shaderProgram.enableAttributeArray(m_texCoordLoc);
         m_shaderProgram.setAttributeArray(m_vertexLoc, vertexData, 2, 0);
         m_shaderProgram.setAttributeArray(m_texCoordLoc, uvData, 2, 0);
-        m_shaderProgram.setAttributeValue(m_texSizeLoc, m_itemWidth, m_itemHeight);
+        m_shaderProgram.setUniformValue(m_texSizeLoc, m_itemWidth, m_itemHeight);
         m_shaderProgram.setUniformValue(m_imageLoc, 0);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
         m_shaderProgram.disableAttributeArray(m_vertexLoc);
