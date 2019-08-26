@@ -20,8 +20,8 @@ protected:
         m_imageLoc(-1),
         m_vertexLoc(-1),
         m_texCoordLoc(-1),
-        //m_texSizeLoc(-1),
-        m_isFirstInit(true)
+        m_texSizeLoc(-1),
+        m_isMoving(false)
     {
         initializeOpenGLFunctions();
         m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
@@ -133,8 +133,17 @@ protected:
         m_texture.setMinificationFilter(QOpenGLTexture::Nearest);
         m_texture.setMagnificationFilter(QOpenGLTexture::Nearest);
         m_texture.setWrapMode(QOpenGLTexture::ClampToEdge);
-        QSize sizeRet, sizeReq;
-        m_texture.setData(imageProv->requestImage("image", &sizeRet, sizeReq), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
+        if (myitem->hasMove())
+        {
+            m_isMoving = true;
+            m_texture.setData(framebufferObject()->toImage(), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
+            myitem->moveCompleted();
+        }
+        else if (!m_isMoving)
+        {
+            QSize sizeRet, sizeReq;
+            m_texture.setData(imageProv->requestImage("image", &sizeRet, sizeReq), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
+        }
     }
 
 private:
@@ -146,10 +155,10 @@ private:
     int m_vertexLoc;
     int m_texCoordLoc;
     int m_texSizeLoc;
-    bool m_isFirstInit;
+    bool m_isMoving;
 };
 
-MoveMaker::MoveMaker(QQuickItem *parent) : QQuickFramebufferObject(parent), m_patternSize(0)
+MoveMaker::MoveMaker(QQuickItem *parent) : QQuickFramebufferObject(parent), m_patternSize(0), m_dirtyMove(false)
 {
 }
 
@@ -161,4 +170,20 @@ QQuickFramebufferObject::Renderer* MoveMaker::createRenderer() const
 int MoveMaker::getPatternSize() const
 {
     return m_patternSize;
+}
+
+void MoveMaker::move()
+{
+    m_dirtyMove = true;
+    update();
+}
+
+bool MoveMaker::hasMove() const
+{
+    return m_dirtyMove;
+}
+
+void MoveMaker::moveCompleted()
+{
+    m_dirtyMove = false;
 }

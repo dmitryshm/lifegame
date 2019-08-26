@@ -10,10 +10,15 @@ class MoveMaker : public QQuickFramebufferObject
     Q_PROPERTY(int patternSize MEMBER m_patternSize READ getPatternSize)
 public:
     MoveMaker(QQuickItem *parent = nullptr);
-    QQuickFramebufferObject::Renderer* createRenderer() const;
+    virtual QQuickFramebufferObject::Renderer* createRenderer() const override;
     int getPatternSize() const;
+    Q_INVOKABLE void move();
+    bool hasMove() const;
+    void moveCompleted();
+
 private:
     int m_patternSize;
+    bool m_dirtyMove;
 };
 
 #endif // MOVEMAKER_H

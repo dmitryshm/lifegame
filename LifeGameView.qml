@@ -18,14 +18,23 @@ Item {
         id: moveMaker
         x: 0
         y: 0
-        width: 100
-        height: 100
+        width: 100 //playGroundSize
+        height: 100 //playGroundSize
         patternSize: playGroundSize
+        //visible: false
         z: 1
     }
 
     Timer {
-        interval: 200
+        id: moveTimer
+        interval: 10000
+        running: false
+        repeat: true
+        onTriggered: moveMaker.move()
+    }
+
+    Timer {
+        interval: 100
         running: true
         repeat: true
         onTriggered: moveMaker.update()
@@ -68,6 +77,18 @@ Item {
     states: [
         State {
             name: "gameRun"
+            PropertyChanges {
+                target: mouseArea
+                enabled: false
+            }
+            PropertyChanges {
+                target: playGround
+                imagePattern: moveMaker
+            }
+            PropertyChanges {
+                target: moveTimer
+                running: true
+            }
         },
         State {
             name: "gameResults"
@@ -75,6 +96,8 @@ Item {
     ]
 
 }
+
+
 
 
 
