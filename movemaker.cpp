@@ -39,10 +39,10 @@ protected:
             "void main() {\n"
             "   float tx = 1.0/texSize.x;\n"
             "   float ty = 1.0/texSize.y;\n"
-            "   float xm = fragTexCoord.x + 1.0 - tx - step(fragTexCoord.x, tx);\n"
-            "   float ym = fragTexCoord.y + 1.0 - ty - step(fragTexCoord.y, ty);\n"
-            "   float xp = fragTexCoord.x + tx - step(fragTexCoord.x + tx, 1.0);\n"
-            "   float yp = fragTexCoord.y + ty - step(fragTexCoord.y + ty, 1.0);\n"
+            "   float xm = fragTexCoord.x + 1.0 - tx - step(tx, fragTexCoord.x);\n"
+            "   float ym = fragTexCoord.y + 1.0 - ty - step(ty, fragTexCoord.y);\n"
+            "   float xp = fragTexCoord.x + tx - step(1.0, fragTexCoord.x + tx);\n"
+            "   float yp = fragTexCoord.y + ty - step(1.0, fragTexCoord.y + ty);\n"
             "   vec4 coo = texture2D(imagePattern, fragTexCoord);\n"
             "   vec4 cmm = texture2D(imagePattern, vec2(xm, ym));\n"
             "   vec4 com = texture2D(imagePattern, vec2(fragTexCoord.x, ym));\n"
@@ -52,8 +52,8 @@ protected:
             "   vec4 cmp = texture2D(imagePattern, vec2(xp, fragTexCoord.y));\n"
             "   vec4 cop = texture2D(imagePattern, vec2(fragTexCoord.x, yp));\n"
             "   vec4 cpp = texture2D(imagePattern, vec2(xp, yp));\n"
-            "   float s = cmm.r + com.r + cpm.r + cmo.r + cpo.r + cmp.r + cop.r + cpp.r;\n"
-            "   float c = step(s, 2.0) + step(3.0, s) - 1.0;\n"
+            "   float s = cmm.x + com.x + cpm.x + cmo.x + cpo.x + cmp.x + cop.x + cpp.x;\n"
+            "   float c = step(2.0, s) + step(s, 3.0) - 1.0;\n"
             "   gl_FragColor = vec4(c, c, c, 1.0);\n"
             "}\n");
         if (!m_shaderProgram.link())
@@ -126,8 +126,8 @@ protected:
         {
             return;
         }
-        m_itemWidth = static_cast<GLfloat>(myitem->width());
-        m_itemHeight = static_cast<GLfloat>(myitem->height());
+        m_itemWidth = static_cast<GLfloat>(myitem->getPatternSize());
+        m_itemHeight = static_cast<GLfloat>(myitem->getPatternSize());
         m_texture.destroy();
         m_texture.create();
         m_texture.setMinificationFilter(QOpenGLTexture::Nearest);
@@ -149,11 +149,16 @@ private:
     bool m_isFirstInit;
 };
 
-MoveMaker::MoveMaker(QQuickItem *parent) : QQuickFramebufferObject(parent)
+MoveMaker::MoveMaker(QQuickItem *parent) : QQuickFramebufferObject(parent), m_patternSize(0)
 {
 }
 
 QQuickFramebufferObject::Renderer* MoveMaker::createRenderer() const
 {
     return new MoveMakerRenderer;
+}
+
+int MoveMaker::getPatternSize() const
+{
+    return m_patternSize;
 }

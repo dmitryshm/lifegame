@@ -20,12 +20,12 @@ Item {
         y: 0
         width: 100
         height: 100
-        //anchors.fill: parent
+        patternSize: playGroundSize
         z: 1
     }
 
     Timer {
-        interval: 2000
+        interval: 200
         running: true
         repeat: true
         onTriggered: moveMaker.update()
