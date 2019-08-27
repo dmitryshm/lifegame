@@ -95,15 +95,6 @@ Item {
     }
 
     Text {
-        id: element9
-        x: 143
-        y: 67
-        text: "1000 мс"
-        visible: false
-        font.pixelSize: 12
-    }
-
-    Text {
         id: element10
         x: 57
         y: 88
@@ -171,11 +162,6 @@ Item {
             }
 
             PropertyChanges {
-                target: element9
-                visible: true
-            }
-
-            PropertyChanges {
                 target: element11
                 visible: true
             }
@@ -216,7 +202,22 @@ Item {
 
             PropertyChanges {
                 target: element5
-                visible: false
+                x: 13
+                y: 35
+                text: "Игра завершилась из-за потвора ситуации на поле."
+                visible: true
+            }
+
+            PropertyChanges {
+                target: element10
+                x: 18
+                text: "последний ход:"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: element11
+                visible: true
             }
         }
     ]

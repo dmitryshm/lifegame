@@ -139,7 +139,7 @@ protected:
         {
             m_isMoving = true;
             QImage img = framebufferObject()->toImage(false);
-            const qint64 cache = img.cacheKey();
+            const quint16 cache = qChecksum(reinterpret_cast<const char*>(img.constBits()), static_cast<uint>(img.sizeInBytes()));
             m_texture.setData(img, QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
             myitem->moveCompleted();
             if (!myitem->updateCache(cache))
@@ -150,7 +150,10 @@ protected:
         else if (!m_isMoving)
         {
             QSize sizeRet, sizeReq;
-            m_texture.setData(imageProv->requestImage("image", &sizeRet, sizeReq), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
+            QImage img = imageProv->requestImage("image", &sizeRet, sizeReq);
+            const quint16 cache = qChecksum(reinterpret_cast<const char*>(img.constBits()), static_cast<uint>(img.sizeInBytes()));
+            myitem->updateCache(cache);
+            m_texture.setData(img, QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
         }
     }
 
@@ -196,7 +199,7 @@ void MoveMaker::moveCompleted()
     m_dirtyMove = false;
 }
 
-bool MoveMaker::updateCache(const qint64 newValue)
+bool MoveMaker::updateCache(const quint16 newValue)
 {
     const bool notFound = (m_imageCaches.find(newValue) == m_imageCaches.end());
     if (notFound)
