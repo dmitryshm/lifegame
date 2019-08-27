@@ -23,6 +23,10 @@ Item {
         height: playGroundSize
         patternSize: playGroundSize
         visible: false
+        onNoMoreMoves: {
+            element.state = "gameResults"
+            element.noMoreMoves()
+        }
     }
 
     Timer {
@@ -69,6 +73,7 @@ Item {
     }
 
     signal moved()
+    signal noMoreMoves()
 
     MouseArea {
         id: mouseArea
@@ -102,6 +107,22 @@ Item {
         },
         State {
             name: "gameResults"
+            PropertyChanges {
+                target: mouseArea
+                enabled: false
+            }
+            PropertyChanges {
+                target: playGround
+                imagePattern: moveMaker
+            }
+            PropertyChanges {
+                target: setupTimer
+                running: false
+            }
+            PropertyChanges {
+                target: moveTimer
+                running: false
+            }
         }
     ]
 

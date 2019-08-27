@@ -24,6 +24,7 @@ Window {
         anchors.top: parent.top
         anchors.topMargin: 20
         onMoved: ++lifeGameSettings.moveNo
+        onNoMoreMoves: lifeGameSettings.state = "gameResults"
     }
 
     Item {

@@ -138,8 +138,14 @@ protected:
         if (myitem->hasMove())
         {
             m_isMoving = true;
-            m_texture.setData(framebufferObject()->toImage(false), QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
+            QImage img = framebufferObject()->toImage(false);
+            const qint64 cache = img.cacheKey();
+            m_texture.setData(img, QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
             myitem->moveCompleted();
+            if (!myitem->updateCache(cache))
+            {
+                emit myitem->noMoreMoves();
+            }
         }
         else if (!m_isMoving)
         {
@@ -188,4 +194,14 @@ bool MoveMaker::hasMove() const
 void MoveMaker::moveCompleted()
 {
     m_dirtyMove = false;
+}
+
+bool MoveMaker::updateCache(const qint64 newValue)
+{
+    const bool notFound = (m_imageCaches.find(newValue) == m_imageCaches.end());
+    if (notFound)
+    {
+        m_imageCaches.insert(newValue);
+    }
+    return notFound;
 }

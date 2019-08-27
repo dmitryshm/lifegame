@@ -15,10 +15,15 @@ public:
     Q_INVOKABLE void move();
     bool hasMove() const;
     void moveCompleted();
+    bool updateCache(const qint64 newValue);
+
+signals:
+    void noMoreMoves();
 
 private:
     int m_patternSize;
     bool m_dirtyMove;
+    QSet<qint64> m_imageCaches;
 };
 
 #endif // MOVEMAKER_H
