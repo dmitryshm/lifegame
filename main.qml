@@ -13,6 +13,7 @@ Window {
     LifeGameView {
         id: gameView
         playGroundSize: lifeGameSettings.sliderValue
+        moveInterval: lifeGameSettings.sliderMovesScale
         anchors.right: rulesView.left
         anchors.rightMargin: 13
         anchors.bottom: parent.bottom
@@ -21,6 +22,7 @@ Window {
         anchors.leftMargin: 9
         anchors.top: parent.top
         anchors.topMargin: 20
+        onMoved: ++lifeGameSettings.moveNo
     }
 
     Item {

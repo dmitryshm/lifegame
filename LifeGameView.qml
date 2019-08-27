@@ -4,6 +4,7 @@ import com.dmitryshm 1.0
 Item {
     id: element
     property int playGroundSize: 10
+    property int moveInterval: 100
 
     CustomImageEditor {
         id: customImageEditor
@@ -18,19 +19,21 @@ Item {
         id: moveMaker
         x: 0
         y: 0
-        width: 100 //playGroundSize
-        height: 100 //playGroundSize
+        width: playGroundSize
+        height: playGroundSize
         patternSize: playGroundSize
-        //visible: false
-        z: 1
+        visible: false
     }
 
     Timer {
         id: moveTimer
-        interval: 1000
+        interval: moveInterval
         running: false
         repeat: true
-        onTriggered: moveMaker.move()
+        onTriggered: {
+            moveMaker.move()
+            element.moved()
+        }
     }
 
     Timer {
@@ -64,6 +67,8 @@ Item {
                 gl_FragColor.a = 1.0;
             }"
     }
+
+    signal moved()
 
     MouseArea {
         id: mouseArea

@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 Item {
     id: element
     property alias sliderValue: slider.value
+    property alias sliderMovesScale: speedSlider.value
     property int moveNo: 0
 
     Text {
@@ -69,7 +70,7 @@ Item {
         height: 10
         visible: false
         font.pixelSize: 12
-        text: "скорость хода"
+        text: "задержка хода"
     }
 
     Slider {
@@ -78,25 +79,17 @@ Item {
         y: 21
         width: 162
         stepSize: 1
-        to: 2
+        from: 1
+        to: 1000
         visible: false
-        value: 1
+        value: 500
     }
 
     Text {
         id: element7
         x: 27
         y: 67
-        text: "1 с"
-        visible: false
-        font.pixelSize: 12
-    }
-
-    Text {
-        id: element8
-        x: 93
-        y: 67
-        text: "0.1 c"
+        text: "минимальная"
         visible: false
         font.pixelSize: 12
     }
@@ -105,7 +98,7 @@ Item {
         id: element9
         x: 143
         y: 67
-        text: "максимальная"
+        text: "1000 мс"
         visible: false
         font.pixelSize: 12
     }
@@ -174,11 +167,6 @@ Item {
 
             PropertyChanges {
                 target: element7
-                visible: true
-            }
-
-            PropertyChanges {
-                target: element8
                 visible: true
             }
 
