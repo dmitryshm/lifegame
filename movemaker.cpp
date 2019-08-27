@@ -53,7 +53,7 @@ protected:
             "   vec4 cop = texture2D(imagePattern, vec2(fragTexCoord.x, yp));\n"
             "   vec4 cpp = texture2D(imagePattern, vec2(xp, yp));\n"
             "   float s = cmm.x + com.x + cpm.x + cmo.x + cpo.x + cmp.x + cop.x + cpp.x;\n"
-            "   float c = step(2.0, s) + step(s, 3.0) - 1.0;\n"
+            "   float c = clamp((step(2.0, s) + step(s, 3.0) - 1.0)*coo.x + (abs(s - 3.0) < 0.01 ? 1.0 : 0.0), 0.0, 1.0);\n"
             "   gl_FragColor = vec4(c, c, c, 1.0);\n"
             "}\n");
         if (!m_shaderProgram.link())

@@ -82,7 +82,7 @@ Item {
         from: 1
         to: 1000
         visible: false
-        value: 500
+        value: 1000
     }
 
     Text {
