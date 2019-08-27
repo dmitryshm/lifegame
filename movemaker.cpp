@@ -139,10 +139,12 @@ protected:
         {
             m_isMoving = true;
             QImage img = framebufferObject()->toImage(false);
-            const quint16 cache = qChecksum(reinterpret_cast<const char*>(img.constBits()), static_cast<uint>(img.sizeInBytes()));
+            const quint16 cache1 = qChecksum(reinterpret_cast<const char*>(img.constBits()), static_cast<uint>(img.sizeInBytes()), Qt::ChecksumType::ChecksumItuV41);
+            const quint16 cache2 = qChecksum(reinterpret_cast<const char*>(img.constBits()), static_cast<uint>(img.sizeInBytes()), Qt::ChecksumType::ChecksumIso3309);
+            const uint hash = qHashBits(reinterpret_cast<const void*>(img.constBits()), static_cast<size_t>(img.sizeInBytes()));
             m_texture.setData(img, QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
             myitem->moveCompleted();
-            if (!myitem->updateCache(cache))
+            if (!myitem->updateCache(3*cache1 + 5*cache2 + 7*hash))
             {
                 emit myitem->noMoreMoves();
             }
@@ -151,8 +153,10 @@ protected:
         {
             QSize sizeRet, sizeReq;
             QImage img = imageProv->requestImage("image", &sizeRet, sizeReq);
-            const quint16 cache = qChecksum(reinterpret_cast<const char*>(img.constBits()), static_cast<uint>(img.sizeInBytes()));
-            myitem->updateCache(cache);
+            const quint16 cache1 = qChecksum(reinterpret_cast<const char*>(img.constBits()), static_cast<uint>(img.sizeInBytes()), Qt::ChecksumType::ChecksumItuV41);
+            const quint16 cache2 = qChecksum(reinterpret_cast<const char*>(img.constBits()), static_cast<uint>(img.sizeInBytes()), Qt::ChecksumType::ChecksumIso3309);
+            const uint hash = qHashBits(reinterpret_cast<const void*>(img.constBits()), static_cast<size_t>(img.sizeInBytes()));
+            myitem->updateCache(3*cache1 + 5*cache2 + 7*hash);
             m_texture.setData(img, QOpenGLTexture::MipMapGeneration::DontGenerateMipMaps);
         }
     }
@@ -199,7 +203,7 @@ void MoveMaker::moveCompleted()
     m_dirtyMove = false;
 }
 
-bool MoveMaker::updateCache(const quint16 newValue)
+bool MoveMaker::updateCache(const quint64 newValue)
 {
     const bool notFound = (m_imageCaches.find(newValue) == m_imageCaches.end());
     if (notFound)
