@@ -111,6 +111,13 @@ Item {
         visible: false
         font.pixelSize: 12
     }
+
+    Text {
+        id: element8
+        text: "1 c"
+        visible: false
+        font.pixelSize: 12
+    }
     states: [
         State {
             name: "gameRun"
@@ -168,6 +175,13 @@ Item {
 
             PropertyChanges {
                 target: element10
+                visible: true
+            }
+
+            PropertyChanges {
+                target: element8
+                x: 161
+                y: 67
                 visible: true
             }
         },
